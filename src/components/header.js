@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import './header.css';
 import profilePhoto from '../assets/images/image.jpeg';
 import { ReactComponent as CarSideIcon } from '../assets/images/car-side-svgrepo-com.svg';
-
 import Notification from './Notofication';
 import ChangePasswordModal from './ChangePasswordModal';
+import SosNotification from './sosNotification';
 
 function Header() {
     const [totalTrips, setTotalTrips] = useState(0);
@@ -19,6 +19,10 @@ function Header() {
     const [managerUsername, setManagerUsername] = useState('');
     const [tripNotifications, setTripNotifications] = useState([]);
     const [showTripNotifications, setShowTripNotifications] = useState(false);
+    const [showSosPopup, setShowSosPopup] = useState(false);
+    const [showCommentPopup, setShowCommentPopup] = useState(false);
+    const [hasSosNotifications, setHasSosNotifications] = useState(false);
+    const [hasCommentNotifications, setHasCommentNotifications] = useState(false);
 
     useEffect(() => {
         const fetchTripStatistics = async () => {
@@ -62,6 +66,24 @@ function Header() {
         };
 
         fetchManagerUsername();
+    }, []);
+
+    useEffect(() => {
+        const fetchSosAndCommentNotifications = async () => {
+            try {
+                const sosResponse = await fetch('http://localhost:5000/api/issues?type=sos');
+                const sosData = await sosResponse.json();
+                setHasSosNotifications(sosData.issues.length > 0);
+
+                const commentResponse = await fetch('http://localhost:5000/api/issues?type=comment');
+                const commentData = await commentResponse.json();
+                setHasCommentNotifications(commentData.issues.length > 0);
+            } catch (error) {
+                console.error('Error fetching SOS or comment notifications:', error);
+            }
+        };
+
+        fetchSosAndCommentNotifications();
     }, []);
 
     const parseNotifications = (data) => {
@@ -127,6 +149,14 @@ function Header() {
         }
     };
 
+    const handleSosClick = () => {
+        setShowSosPopup(true);
+    };
+
+    const handleCommentClick = () => {
+        setShowCommentPopup(true);
+    };
+
     return (
         <header className="headero">
             <div className="header-org">
@@ -135,11 +165,18 @@ function Header() {
                     <input className="search-header" type="text" placeholder="Search" />
                 </div>
                 <div className="icons-container">
+                    <div className="notification-icon" onClick={handleSosClick}>
+                        <i className="fas fa-exclamation-triangle"></i>
+                        {hasSosNotifications && <span className="notification-dot red"></span>}
+                    </div>
+                    <div className="notification-icon" onClick={handleCommentClick}>
+                        <i className="fas fa-comment"></i>
+                        {hasCommentNotifications && <span className="notification-dot red"></span>}
+                    </div>
                     <div className="notification-icon" onClick={() => setShowPopup(true)}>
                         <i className="fas fa-exclamation-circle"></i>
                         {notifications.length > 0 && <span className="notification-dot"></span>}
                     </div>
-
                 </div>
                 <div className="vertical-line"></div>
                 <div className="profile-container">
@@ -217,6 +254,18 @@ function Header() {
                     </ul>
                     <button onClick={toggleTripNotifications}>Close</button>
                 </div>
+            )}
+            {showSosPopup && (
+                <SosNotification
+                    type="sos"
+                    onClose={() => setShowSosPopup(false)}
+                />
+            )}
+            {showCommentPopup && (
+                <SosNotification
+                    type="comment"
+                    onClose={() => setShowCommentPopup(false)}
+                />
             )}
         </header>
     );

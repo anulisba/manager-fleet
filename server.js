@@ -25,12 +25,16 @@ const vehicleRoutes = require('./routes/vehicles');
 const driverRoutes = require('./routes/drivers');
 const workshopMovementRoutes = require('./routes/workshopMovements');
 const managerRoutes = require('./routes/managers');
+const issueRoutes = require('./routes/issues');
 
 // Use routes
 app.use('/api', vehicleRoutes);
 app.use('/api', driverRoutes);
 app.use('/api', workshopMovementRoutes);
 app.use('/api', managerRoutes);
+
+app.use('/api', issueRoutes);
+
 
 
 // Models
