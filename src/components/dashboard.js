@@ -80,12 +80,18 @@ function Dashboard() {
     });
     const [driverData, setDriverData] = useState({
         drivername: '',
-        driverusername: '',
+        driverid: '',
         driverpassword: '',
-        driverlicenceno: '',
         drivermobile: '',
+        driverlicenceno: '',
         driverlicenceexp: '',
     });
+
+    const generateDriverID = () => {
+        const newDriverID = `DR${String(driverCount).padStart(3, '0')}`;
+        setDriverData((prevData) => ({ ...prevData, driverid: newDriverID }));
+        setDriverCount(driverCount + 1);
+    };
     const handleClick = () => {
         // Navigate to the section with id 'scratches'
         const scratchesSection = document.getElementById('scratches');
@@ -115,7 +121,8 @@ function Dashboard() {
             ...driverData,
             [name]: files ? files[0] : value,
         });
-    }
+    };
+
     const [popupMessage, setPopupMessage] = useState('');
 
     const [showSucessPopup, setShowSucessPopup] = useState(false);
@@ -168,10 +175,9 @@ function Dashboard() {
     const handleDriverSubmit = async (e) => {
         e.preventDefault();
 
-        // Assuming driverData is a state object containing form data
         const driverData = {
             drivername: e.target.drivername.value,
-            driverusername: e.target.driverusername.value,
+            driverid: e.target.driverid.value,
             driverpassword: e.target.driverpassword.value,
             drivermobile: e.target.drivermobile.value,
             driverlicenceno: e.target.driverlicenceno.value,
@@ -190,6 +196,14 @@ function Dashboard() {
             if (response.ok) {
                 setPopupMessage('Driver added successfully!');
                 setShowSucessDriverPopup(true);
+                setDriverData({
+                    drivername: '',
+                    driverid: '',
+                    driverpassword: '',
+                    drivermobile: '',
+                    driverlicenceno: '',
+                    driverlicenceexp: '',
+                })
             } else {
                 const errorText = await response.text();
                 alert(`Error adding driver: ${errorText}`);
@@ -199,6 +213,7 @@ function Dashboard() {
             alert('An error occurred while adding the driver.');
         }
     };
+
     const [driverCount, setDriverCount] = useState(0);
     useEffect(() => {
         const fetchDriverCount = async () => {
@@ -215,19 +230,32 @@ function Dashboard() {
     const [tripData, setTripData] = useState({
         vehicleName: '',
         vehicleNumber: '',
-        driverUsername: '',
+        driverId: '',
         tripDate: '',
         tripType: '',
         odometerReading: '',
         remunarationType: '',
         tripRemunaration: '',
     });
-    const handleTripChange = (e) => {
-        const { name, value } = e.target;
-        setTripData({
-            ...tripData,
-            [name]: value,
-        });
+    const [tripCount, setTripCount] = useState(0);
+
+    useEffect(() => {
+        const fetchTripCount = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/tripCount');
+                const data = await response.json();
+                setTripCount(data.count);
+            } catch (error) {
+                console.error('Error fetching trip count:', error);
+            }
+        };
+        fetchTripCount();
+    }, []);
+
+    const generateTripNumber = () => {
+        const newTripNumber = `TR${String(tripCount).padStart(3, '0')}`;
+        setTripData((prevData) => ({ ...prevData, tripNumber: newTripNumber }));
+        setTripCount(tripCount + 1);
     };
 
     const handleTripSubmit = async (e) => {
@@ -250,7 +278,7 @@ function Dashboard() {
                 setTripData({
                     tripNumber: '',
                     vehicleNumber: '',
-                    driverUsername: '',
+                    driverId: '',
                     tripDate: '',
                     tripEndDate: '',
                     tripType: '',
@@ -265,6 +293,15 @@ function Dashboard() {
             console.error('Error assigning trip:', error);
         }
     };
+
+    const handleTripChange = (e) => {
+        const { name, value } = e.target;
+        setTripData({
+            ...tripData,
+            [name]: value,
+        });
+    };
+
     const [carCounts, setCarCounts] = useState({
         onTrip: 0,
         inYard: 0,
@@ -1235,7 +1272,16 @@ function Dashboard() {
                                 <div class="add-car">
                                     <div class="form-container">
                                         <form className="c-form" onSubmit={handleDriverSubmit}>
-                                            <h2>Add A Driver</h2>
+                                            <div className="header-form">
+                                                <h2>Add A Driver</h2>
+                                                <button
+                                                    type="button"
+                                                    className="generate-id-button"
+                                                    onClick={generateDriverID}
+                                                >
+                                                    Generate Driver ID
+                                                </button>
+                                            </div>
                                             <div className="c-form-field-row">
                                                 <div className="c-form-field-column">
                                                     <label htmlFor="drivername">Driver Name</label>
@@ -1247,20 +1293,19 @@ function Dashboard() {
                                                         className="c-input-field"
                                                         value={driverData.drivername}
                                                         onChange={handleDriverChange}
-
                                                     />
                                                 </div>
                                                 <div className="c-form-field-column">
-                                                    <label htmlFor="driverusername">Driver Username</label>
+                                                    <label htmlFor="driverid">Driver ID</label>
                                                     <input
                                                         type="text"
-                                                        name="driverusername"
-                                                        id="driverusername"
-                                                        placeholder="Driver Username"
+                                                        name="driverid"
+                                                        id="driverid"
+                                                        placeholder="Driver ID"
                                                         className="c-input-field"
-                                                        value={driverData.driverusername}
+                                                        value={driverData.driverid}
                                                         onChange={handleDriverChange}
-
+                                                        disabled
                                                     />
                                                 </div>
                                             </div>
@@ -1287,7 +1332,6 @@ function Dashboard() {
                                                         className="c-input-field"
                                                         value={driverData.drivermobile}
                                                         onChange={handleDriverChange}
-
                                                     />
                                                 </div>
                                             </div>
@@ -1298,13 +1342,11 @@ function Dashboard() {
                                                         type="text"
                                                         name="driverlicenceno"
                                                         id="driverlicenceno"
-                                                        placeholder='Driver Licence Number'
+                                                        placeholder="Driver Licence Number"
                                                         className="c-input-field"
                                                         value={driverData.driverlicenceno}
                                                         onChange={handleDriverChange}
-
                                                     />
-
                                                 </div>
                                                 <div className="c-form-field-column">
                                                     <label htmlFor="driverlicenceexp">Driver Licence Expiry</label>
@@ -1312,7 +1354,7 @@ function Dashboard() {
                                                         type="date"
                                                         name="driverlicenceexp"
                                                         id="driverlicenceexp"
-                                                        placeholder='Expiry DATE'
+                                                        placeholder="Expiry DATE"
                                                         className="c-input-field"
                                                         value={driverData.driverlicenceexp}
                                                         onChange={handleDriverChange}
@@ -1366,18 +1408,28 @@ function Dashboard() {
                             <div class="add-trip">
                                 <div class="form-container">
                                     <form className="c-form-trip" onSubmit={handleTripSubmit}>
-                                        <h2>ASSIGN TRIP</h2>
+                                        <div className="header-form">
+                                            <h2>ASSIGN TRIP</h2>
+                                            <button
+                                                type="button"
+                                                className="generate-id-button"
+                                                onClick={generateTripNumber}
+                                            >
+                                                Generate Trip Number
+                                            </button>
+                                        </div>
                                         <div className="c-form-field-row-trip">
                                             <div className="c-form-field-column-trip">
                                                 <label htmlFor="tripNumber">Trip ID</label>
                                                 <input
                                                     type="text"
                                                     name="tripNumber"
-                                                    id="triNumber"
+                                                    id="tripNumber"
                                                     placeholder="Trip ID"
                                                     className="c-input-field-trip"
                                                     value={tripData.tripNumber}
                                                     onChange={handleTripChange}
+                                                    disabled
                                                 />
                                             </div>
                                             <div className="c-form-field-column-trip">
@@ -1393,22 +1445,21 @@ function Dashboard() {
                                                 />
                                             </div>
                                             <div className="c-form-field-column-trip">
-                                                <label htmlFor="driverusername">Driver ID</label>
+                                                <label htmlFor="driverId">Driver ID</label>
                                                 <input
                                                     type="text"
-                                                    name="driverUsername"
-                                                    id="driverUsername"
+                                                    name="driverId"
+                                                    id="driverId"
                                                     placeholder="Driver ID"
                                                     className="c-input-field-trip"
-                                                    value={tripData.driverUsername}
+                                                    value={tripData.driverId}
                                                     onChange={handleTripChange}
                                                 />
                                             </div>
                                         </div>
                                         <div className="c-form-field-row-trip">
-
                                             <div className="c-form-field-column-50-trip">
-                                                <label htmlFor="tripdate">Trip Date</label>
+                                                <label htmlFor="tripDate">Trip Date</label>
                                                 <input
                                                     type="date"
                                                     name="tripDate"
@@ -1419,7 +1470,7 @@ function Dashboard() {
                                                 />
                                             </div>
                                             <div className="c-form-field-column-50-trip">
-                                                <label htmlFor="tripenddate">Trip End Date</label>
+                                                <label htmlFor="tripEndDate">Trip End Date</label>
                                                 <input
                                                     type="date"
                                                     name="tripEndDate"
@@ -1432,9 +1483,8 @@ function Dashboard() {
                                             </div>
                                         </div>
                                         <div className="c-form-field-row-trip">
-
                                             <div className="c-form-field-column-25-trip">
-                                                <label htmlFor="odometerreading">Odometer Reading</label>
+                                                <label htmlFor="odometerReading">Odometer Reading</label>
                                                 <input
                                                     type="text"
                                                     name="odometerReading"
@@ -1446,7 +1496,7 @@ function Dashboard() {
                                                 />
                                             </div>
                                             <div className="c-form-field-column-75-trip">
-                                                <label htmlFor="triptype">Trip Type</label>
+                                                <label htmlFor="tripType">Trip Type</label>
                                                 <select
                                                     name="tripType"
                                                     id="tripType"
@@ -1462,7 +1512,7 @@ function Dashboard() {
                                         </div>
                                         <div className="c-form-field-row-trip">
                                             <div className="c-form-field-column-75-trip">
-                                                <label htmlFor="remunarationtype">Remuneration Type</label>
+                                                <label htmlFor="remunarationType">Remuneration Type</label>
                                                 <select
                                                     name="remunarationType"
                                                     id="remunarationType"
@@ -1477,7 +1527,7 @@ function Dashboard() {
                                                 </select>
                                             </div>
                                             <div className="c-form-field-column-25-trip">
-                                                <label htmlFor="tripremunaration">Remuneration</label>
+                                                <label htmlFor="tripRemunaration">Remuneration</label>
                                                 <input
                                                     type="text"
                                                     name="tripRemunaration"

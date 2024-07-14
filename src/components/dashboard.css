@@ -385,8 +385,9 @@ p {
     flex-direction: column;
     justify-content: space-between;
     /* Ensure elements within the form are spaced evenly */
-    height: 100%;
-    width: 110%;
+    height: 90%;
+    margin: 20px;
+    width: 170%;
 }
 
 .c-form h2 {
@@ -397,7 +398,7 @@ p {
 
 .c-form-field-row {
     display: flex;
-    width: 160%;
+    width: 100%;
     margin-bottom: 15px;
     gap: 15px;
 }
@@ -444,6 +445,27 @@ p {
     box-sizing: border-box;
     border: none;
     transition: border-color 0.3s ease;
+}
+
+.header-form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.generate-id-button {
+    background-color: var(--card-bg);
+    border: 1px solid var(--primary-color);
+    padding: 8px 16px;
+    cursor: pointer;
+    align-self: right;
+    border-radius: 8px;
+}
+
+.generate-id-button:hover {
+    background-color: var(--sec-background-color);
+    color: var(--primary-color);
 }
 
 /* Hide the default file input */
@@ -604,7 +626,7 @@ p {
 }
 
 .c-form-trip {
-    margin-left: 20px;
+    margin: 20px;
 }
 
 .c-form-field-row-trip {
@@ -1357,7 +1379,12 @@ section {}
     }
 
     .c-form {
-        width: 60%;
+        width: 100%;
+    }
+
+    .generate-id-button {
+        padding: 8px;
+        font-size: 10px;
     }
 
     .add-trip {
@@ -1404,6 +1431,7 @@ section {}
     body {
         width: 100%;
         margin: 0;
+        overflow-x: hidden;
     }
 
     .dashboard {
@@ -1535,9 +1563,14 @@ section {}
     }
 
     .c-form {
-        width: 57%;
+        width: 95%;
         margin-left: 0px;
         /* Adjusted to fit container */
+    }
+
+    .generate-id-button {
+        font-size: 10px;
+        padding: 8px;
     }
 
     .c-submit-button {

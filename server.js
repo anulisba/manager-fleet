@@ -321,14 +321,14 @@ app.post('/api/vehicles/:vehicleNumber/clear', async (req, res) => {
 });
 
 app.post('/updatedriver', async (req, res) => {
-  const { id, driverName, driverUsername, driverPassword, mobileNumber, driverLicenceNumber, driverLicenceExpiryDate } = req.body;
+  const { id, driverName, driverId, driverPassword, mobileNumber, driverLicenceNumber, driverLicenceExpiryDate } = req.body;
   try {
     const result = await Driver.updateOne(
       { _id: id },
       {
         $set: {
           driverName,
-          driverUsername,
+          driverId,
           driverPassword,
           mobileNumber,
           driverLicenceNumber,
@@ -383,7 +383,7 @@ app.post('/api/vehicles', upload.single('vehiclephoto'), async (req, res) => {
 app.post('/api/drivers', async (req, res) => {
   try {
     const driver = new Driver({
-      driverUsername: req.body.driverusername,
+      driverId: req.body.driverid,
       driverPassword: req.body.driverpassword,
       driverName: req.body.drivername,
       mobileNumber: req.body.drivermobile,
@@ -411,7 +411,7 @@ app.post('/api/trips', async (req, res) => {
   const {
     tripNumber,
     vehicleNumber,
-    driverUsername,
+    driverId,
     tripDate,
     tripEndDate,
     tripType,
@@ -424,7 +424,7 @@ app.post('/api/trips', async (req, res) => {
     const trip = new Trip({
       tripNumber,
       vehicleNumber,
-      driverUsername,
+      driverId,
       tripDate,
       tripEndDate,
       tripType,
@@ -436,7 +436,7 @@ app.post('/api/trips', async (req, res) => {
     const savedTrip = await trip.save();
 
     await Driver.updateOne(
-      { driverUserName: driverUsername },
+      { driverId: driverId },
       { $push: { trips: savedTrip._id } }
     );
 
@@ -461,7 +461,7 @@ app.post('/api/notes/:type', async (req, res) => {
 
   try {
     if (type === 'drivers') {
-      const driver = await Driver.findOne({ driverUsername: id });
+      const driver = await Driver.findOne({ driverId: id });
       if (!driver) {
         return res.status(404).json({ message: 'Driver not found' });
       }
@@ -486,7 +486,7 @@ app.post('/api/notes/:type', async (req, res) => {
 
 app.get('/api/notes', async (req, res) => {
   try {
-    const driverNotes = await Driver.find({ notesAboutDriver: { $ne: null } }, { driverUsername: 1, notesAboutDriver: 1 })
+    const driverNotes = await Driver.find({ notesAboutDriver: { $ne: null } }, { driverId: 1, notesAboutDriver: 1 })
       .sort({ _id: -1 })
       .limit(20)
       .lean();
@@ -497,7 +497,7 @@ app.get('/api/notes', async (req, res) => {
       .lean();
 
     const combinedNotes = [
-      ...driverNotes.map(note => ({ type: 'driver', id: note.driverUsername, content: note.notesAboutDriver, _id: note._id })),
+      ...driverNotes.map(note => ({ type: 'driver', id: note.driverId, content: note.notesAboutDriver, _id: note._id })),
       ...vehicleNotes.map(note => ({ type: 'vehicle', id: note.vehicleNumber, content: note.notesAboutVehicle, _id: note._id }))
     ].sort((a, b) => new Date(b._id) - new Date(a._id));
 
@@ -632,7 +632,7 @@ app.get('/api/dueDates', async (req, res) => {
     // Fetch driver licence expiry dates
     const drivers = await Driver.find({
       driverLicenceExpiryDate: { $lte: oneWeekFromNow }
-    }, 'driverUsername driverLicenceExpiryDate');
+    }, 'driverId driverLicenceExpiryDate');
 
     // Fetch next oil and tyre change dates from workshop movements
     const workshopMovements = await WorkshopMovement.find({

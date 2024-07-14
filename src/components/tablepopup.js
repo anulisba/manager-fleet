@@ -1,12 +1,12 @@
 // tablepopup.js
 import React, { useState } from 'react';
-import './tablepopup.css'
+import './tablepopup.css';
 
 const TablePopup = ({ onClose, onSubmit }) => {
     const [formData, setFormData] = useState({
         vehicleNumber: '',
         workshopVisitDate: '',
-        dropBox: '',
+        visitType: '',
         nextOilChange: '',
         nextTyreChange: '',
         noOfDays: '',
@@ -20,7 +20,23 @@ const TablePopup = ({ onClose, onSubmit }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData);
+
+        let complaintDetail = '';
+        switch (formData.visitType) {
+            case 'tyreChange':
+                complaintDetail = 'Tyre Change';
+                break;
+            case 'oilChange':
+                complaintDetail = 'Oil Change';
+                break;
+            case 'other':
+                complaintDetail = formData.complaintDetail;
+                break;
+            default:
+                break;
+        }
+
+        onSubmit({ ...formData, complaintDetail });
     };
 
     return (
@@ -42,32 +58,70 @@ const TablePopup = ({ onClose, onSubmit }) => {
                         </div>
                         <div className="popup-form-field-row">
                             <div className="popup-form-field-column">
-                                <label>Next Oil Change</label>
-                                <input type="text" className='popup-input-field' name="nextOilChange" value={formData.nextOilChange} onChange={handleChange} required />
+                                <label>Type of Workshop Visit</label>
+                                <select name="visitType" className='popup-input-field' value={formData.visitType} onChange={handleChange} required>
+                                    <option value="">Select</option>
+                                    <option value="tyreChange">Tyre Change</option>
+                                    <option value="oilChange">Oil Change</option>
+                                    <option value="other">Other</option>
+                                </select>
                             </div>
                         </div>
-                        <div className="popup-form-field-row">
-                            <div className="popup-form-field-column">
-                                <label>Next Tyre Change</label>
-                                <input type="text" className='popup-input-field' name="nextTyreChange" value={formData.nextTyreChange} onChange={handleChange} required />
-                            </div>
-                            <div className="popup-form-field-column">
-                                <label>No of Days</label>
-                                <input type="number" className='popup-input-field' name="noOfDays" value={formData.noOfDays} onChange={handleChange} required />
-                            </div>
-                        </div>
-                        <div className="popup-form-field-row">
-                            <div className="popup-form-field-column">
-                                <label>Complaint Detail</label>
-                                <input name="complaintDetail" className='popup-input-field' value={formData.complaintDetail} onChange={handleChange} required />
-                            </div>
-                            <div className="popup-form-field-column">
-                                <label>Amount Spent</label>
-                                <input type="number" className='popup-input-field' name="amountSpent" value={formData.amountSpent} onChange={handleChange} required />
-                            </div>
-                        </div>
+                        {formData.visitType === 'tyreChange' && (
+                            <>
+                                <div className="popup-form-field-row">
+                                    <div className="popup-form-field-column">
+                                        <label>Next Tyre Change (in km)</label>
+                                        <input type="text" className='popup-input-field' name="nextTyreChange" value={formData.nextTyreChange} onChange={handleChange} required />
+                                    </div>
+                                    <div className="popup-form-field-column">
+                                        <label>No of Days in Workshop</label>
+                                        <input type="number" className='popup-input-field' name="noOfDays" value={formData.noOfDays} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                                <div className="popup-form-field-row">
+                                    <div className="popup-form-field-column">
+                                        <label>Amount Spent</label>
+                                        <input type="number" className='popup-input-field' name="amountSpent" value={formData.amountSpent} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {formData.visitType === 'oilChange' && (
+                            <>
+                                <div className="popup-form-field-row">
+                                    <div className="popup-form-field-column">
+                                        <label>Next Oil Change (in km)</label>
+                                        <input type="text" className='popup-input-field' name="nextOilChange" value={formData.nextOilChange} onChange={handleChange} required />
+                                    </div>
+                                    <div className="popup-form-field-column">
+                                        <label>No of Days in Workshop</label>
+                                        <input type="number" className='popup-input-field' name="noOfDays" value={formData.noOfDays} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                                <div className="popup-form-field-row">
+                                    <div className="popup-form-field-column">
+                                        <label>Amount Spent</label>
+                                        <input type="number" className='popup-input-field' name="amountSpent" value={formData.amountSpent} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {formData.visitType === 'other' && (
+                            <>
+                                <div className="popup-form-field-row">
+                                    <div className="popup-form-field-column">
+                                        <label>Complaint Detail</label>
+                                        <input name="complaintDetail" className='popup-input-field' value={formData.complaintDetail} onChange={handleChange} required />
+                                    </div>
+                                    <div className="popup-form-field-column">
+                                        <label>Amount Spent</label>
+                                        <input type="number" className='popup-input-field' name="amountSpent" value={formData.amountSpent} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                            </>
+                        )}
                         <button className='c-submit-button' type="submit">Submit</button>
-
                     </form>
                 </div>
             </div>

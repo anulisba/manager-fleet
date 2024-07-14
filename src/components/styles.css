@@ -619,6 +619,10 @@
     width: 600px;
   }
 
+  .scratch {
+    margin-left: 50px;
+  }
+
   .image-gallery {
     margin-left: 120px;
   }
@@ -660,6 +664,7 @@
     gap: 20px;
   }
 
+
   .sc {
 
     width: 50%;
@@ -683,19 +688,51 @@
 
   .draw-board {
     height: 400px;
-    width: 590px;
+    width: 560px;
   }
 
   .image-gallery {
-    margin-left: 150px;
+    margin-left: 158px;
   }
 
   .tools-board {
 
     height: 100px;
-    width: 600px;
+    width: 665px;
 
   }
+
+  .clear-canvas {
+    margin-right: -10px;
+  }
+
+
+
+  .option #color-picker {
+    width: 20px;
+  }
+
+  .undo-btn {
+    margin-left: 5px;
+    padding: 8px 10px;
+  }
+
+  .redo-btn {
+    padding: 8px 10px;
+  }
+
+  .zoom-in {
+    padding: 8px 10px;
+  }
+
+  .zoom-out {
+    padding: 8px 10px;
+  }
+
+  .row .dropdown {
+    width: 140px;
+  }
+
 
   .buttons-below {
     display: flex;

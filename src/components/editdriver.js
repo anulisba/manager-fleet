@@ -88,7 +88,7 @@ function EditDriver() {
                             </div>
                             <div className="driver-detail">
                                 <h2>Driver ID:</h2>
-                                <span>{driver.driverUsername}</span>
+                                <span>{driver.driverId}</span>
                             </div>
                             <div className="driver-actions">
                                 <button className="edit-button" onClick={() => handleEditClick(driver)}>

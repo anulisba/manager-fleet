@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import CustomAlert from './customAlert';
-import './driverpopup.css' // Import the custom alert component
-// Assuming you create popupform.css for styling
+import './driverpopup.css';
 
 const DriverPopupForm = ({ driver, onSubmit, onClose }) => {
     const [driverName, setDriverName] = useState("");
-    const [driverUsername, setDriverUsername] = useState("");
+    const [driverId, setDriverId] = useState("");
     const [driverPassword, setDriverPassword] = useState("");
+    const [driverPin, setDriverPin] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
     const [driverLicenceNumber, setDriverLicenceNumber] = useState("");
     const [driverLicenceExpiryDate, setDriverLicenceExpiryDate] = useState("");
-    const [alertMessage, setAlertMessage] = useState(""); // State for alert message
+    const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(() => {
         if (driver) {
             setDriverName(driver.driverName || "");
-            setDriverUsername(driver.driverUsername || "");
+            setDriverId(driver.driverId || "");
             setDriverPassword(driver.driverPassword || "");
+            setDriverPin(driver.driverPin || "");
             setMobileNumber(driver.mobileNumber || "");
             setDriverLicenceNumber(driver.driverLicenceNumber || "");
             setDriverLicenceExpiryDate(driver.driverLicenceNumber ? new Date(driver.driverLicenceExpiryDate).toISOString().split('T')[0] : "");
@@ -28,8 +29,9 @@ const DriverPopupForm = ({ driver, onSubmit, onClose }) => {
         const formData = {
             id: driver._id,
             driverName,
-            driverUsername,
+            driverId,
             driverPassword,
+            driverPin,
             mobileNumber,
             driverLicenceNumber,
             driverLicenceExpiryDate,
@@ -64,10 +66,10 @@ const DriverPopupForm = ({ driver, onSubmit, onClose }) => {
         <div className="popup-form-overlay-driv">
             <div className="popup-form-container-driv">
                 <span className="close-popup-driv" onClick={onClose}>&times;</span>
-                <form className="popup-form-driv" style={{ paddingRight: '50px' }} onSubmit={handleSubmit}>
+                <form className="popup-form-driv" onSubmit={handleSubmit}>
                     <h2>Edit Driver Details</h2>
                     <div className="popup-form-field-row-driv">
-                        <div className="popup-form-field-column-driv">
+                        <div className="popup-form-field-column-driv" style={{ width: '25%' }}>
                             <label htmlFor="drivername">Driver Name</label>
                             <input
                                 type="text"
@@ -80,41 +82,53 @@ const DriverPopupForm = ({ driver, onSubmit, onClose }) => {
                                 required
                             />
                         </div>
-                        <div className="popup-form-field-column-driv">
-                            <label htmlFor="driverusername">Driver ID</label>
+                        <div className="popup-form-field-column-driv" style={{ width: '25%' }}>
+                            <label htmlFor="driverid">Driver ID</label>
                             <input
                                 type="text"
-                                name="driverusername"
-                                id="driverusername"
+                                name="driverid"
+                                id="driverid"
                                 placeholder="Driver ID"
                                 className="popup-input-field-driv"
-                                value={driverUsername}
-                                onChange={(e) => setDriverUsername(e.target.value)}
+                                value={driverId}
+                                onChange={(e) => setDriverId(e.target.value)}
+                                required />
+                        </div>
+                        <div className="popup-form-field-column-driv" style={{ width: '25%' }}>
+                            <label htmlFor="driverpin">Driver Pin</label>
+                            <input
+                                type="number"
+                                name="driverpin"
+                                id="driverpin"
+                                placeholder="Pin Number"
+                                className="popup-input-field-driv"
+                                value={driverPin}
+                                onChange={(e) => setDriverPin(e.target.value)}
                                 required
                             />
                         </div>
                     </div>
                     <div className="popup-form-field-row-driv">
-                        <div className="popup-form-field-column-driv">
+                        <div className="popup-form-field-column-driv" style={{ width: '50%' }}>
                             <label htmlFor="driverpassword">Password</label>
                             <input
                                 type="text"
                                 name="driverpassword"
                                 id="driverpassword"
-                                placeholder='Password'
+                                placeholder="Password"
                                 className="popup-input-field-driv"
                                 value={driverPassword}
                                 onChange={(e) => setDriverPassword(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="popup-form-field-column-driv">
+                        <div className="popup-form-field-column-driv" style={{ width: '50%' }}>
                             <label htmlFor="drivermobile">Mobile Number</label>
                             <input
                                 type="text"
                                 name="drivermobile"
                                 id="drivermobile"
-                                placeholder='Mobile Number'
+                                placeholder="Mobile Number"
                                 className="popup-input-field-driv"
                                 value={mobileNumber}
                                 onChange={(e) => setMobileNumber(e.target.value)}
@@ -123,20 +137,20 @@ const DriverPopupForm = ({ driver, onSubmit, onClose }) => {
                         </div>
                     </div>
                     <div className="popup-form-field-row-driv">
-                        <div className="popup-form-field-column-driv">
+                        <div className="popup-form-field-column-driv" style={{ width: '50%' }}>
                             <label htmlFor="driverlicenceno">Driver Licence Number</label>
                             <input
                                 type="text"
                                 name="driverlicenceno"
                                 id="driverlicenceno"
                                 className="popup-input-field-driv"
-                                placeholder='Licence Number'
+                                placeholder="Licence Number"
                                 value={driverLicenceNumber}
                                 onChange={(e) => setDriverLicenceNumber(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="popup-form-field-column-driv">
+                        <div className="popup-form-field-column-driv" style={{ width: '50%' }}>
                             <label htmlFor="driverlicenceexp">Driver Licence Expiry</label>
                             <input
                                 type="date"

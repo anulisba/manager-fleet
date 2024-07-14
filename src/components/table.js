@@ -17,19 +17,20 @@ const Table = () => {
                 const response = await fetch('http://localhost:5000/api/workshop-movements');
                 const result = await response.json();
 
-                // Aggregate data by vehicle number
+                // Aggregate data by vehicle number and find the latest tyre change date
                 const aggregatedData = result.reduce((acc, item) => {
                     const vehicle = acc.find(v => v.vehicleNumber === item.vehicleNumber);
                     if (vehicle) {
                         vehicle.workshopVisits += 1;
-                        vehicle.LastService = item.workshopVisitDate; // Update to latest service date
-                        vehicle.TireChange = item.nextTyreChange; // Update to latest tire change date
+                        vehicle.LastService = new Date(vehicle.LastService) > new Date(item.workshopVisitDate) ? vehicle.LastService : item.workshopVisitDate;
+                        if (item.complaintDetail === 'Tyre Change') {
+                            vehicle.TyreChange = new Date(vehicle.TyreChange) > new Date(item.workshopVisitDate) ? vehicle.TyreChange : item.workshopVisitDate;
+                        }
                     } else {
                         acc.push({
                             vehicleNumber: item.vehicleNumber,
-                            vehicleName: item.vehicleName,
                             LastService: item.workshopVisitDate,
-                            TireChange: item.nextTyreChange,
+                            TyreChange: item.complaintDetail === 'Tyre Change' ? item.workshopVisitDate : null,
                             workshopVisits: 1,
                         });
                     }
@@ -93,7 +94,6 @@ const Table = () => {
         }
     };
 
-
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -115,9 +115,8 @@ const Table = () => {
                 <thead>
                     <tr>
                         <th>Vehicle Number</th>
-
                         <th>Last Service</th>
-                        <th>Tire Change</th>
+                        <th>Tyre Change</th>
                         <th>Workshop Visits</th>
                         <th>Action</th>
                     </tr>
@@ -126,9 +125,8 @@ const Table = () => {
                     {filteredData.map((item, index) => (
                         <tr key={index}>
                             <td>{item.vehicleNumber}</td>
-
                             <td>{formatDate(item.LastService)}</td>
-                            <td>{item.TireChange}</td>
+                            <td>{item.TyreChange ? formatDate(item.TyreChange) : 'N/A'}</td>
                             <td>{item.workshopVisits}</td>
                             <td>
                                 <button className="action-button" onClick={() => handleShowDetails(item.vehicleNumber)}>

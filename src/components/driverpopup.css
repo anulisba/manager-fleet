@@ -6,26 +6,20 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Semi-transparent black background */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    /* Ensure the popup is on top of other content */
 }
 
 /* Styling for the popup form container */
 .popup-form-container-driv {
     background-color: #ffffff;
-    /* White background */
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    /* Adjust width as needed */
     max-width: 600px;
-    /* Limit maximum width */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Shadow for depth */
     position: relative;
 }
 
@@ -37,7 +31,6 @@
     font-size: 24px;
     cursor: pointer;
     color: #666666;
-    /* Light gray color */
 }
 
 /* Form styling */
@@ -46,40 +39,29 @@
     flex-direction: column;
     width: 100%;
     text-align: left;
-    /* Ensure form takes full width of container */
 }
 
 .popup-form-driv h2 {
     margin-top: 0;
     margin-bottom: 25px;
     text-align: center;
-    /* Center align the form title */
 }
 
 .popup-form-field-row-driv {
     display: flex;
     margin-bottom: 15px;
     flex-wrap: wrap;
-    /* Allow fields to wrap on smaller screens */
 }
 
 .popup-form-field-column-driv {
-    flex: 1 1 45%;
-    margin-right: 5px;
-    /* Adjust spacing between columns */
-    margin-bottom: 5px;
-    /* Adjust spacing between rows */
-}
-
-.popup-form-field-column-driv:last-child {
-    margin-right: 0;
-    /* Remove margin from last column */
+    flex: 1 1 25%;
+    margin-right: 10px;
+    margin-bottom: 15px;
 }
 
 .popup-form-field-column-driv label {
-    margin-bottom: 10px;
-    font-size: 15px;
     margin-bottom: 5px;
+    font-size: 15px;
     text-align: left;
 }
 
@@ -89,7 +71,6 @@
     padding: 10px;
     box-sizing: border-box;
     background-color: var(--input-field);
-    /* Light gray border */
     border-radius: 15px;
     border: none;
 }
@@ -98,25 +79,21 @@
 .popup-file-input-driv:focus {
     outline: none;
     background-color: var(--input-field);
-    /* Highlight color on focus */
 }
 
 .popup-submit-button-driv {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 8px;
-    border: none;
+    border-radius: 20px;
+    color: #ffffff;
     background-color: var(--button-color);
-    /* Use button color variable */
-    color: var(--button-font-color);
-    /* Use button font color variable */
-    align-self: flex-start;
-    /* Align button to the left */
-    transition: background-color 0.3s ease;
+    border: none;
+    width: 150px;
+    align-self: center;
+    text-align: center;
 }
 
 .popup-submit-button-driv:hover {
     background-color: var(--secondary-color);
-    /* Darker shade of button color on hover */
 }

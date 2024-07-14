@@ -78,6 +78,18 @@
     border-bottom: 2px solid var(--secondary-color);
 }
 
+.c-input-field-s :active {
+    width: 70%;
+    /* Set input field width */
+    margin: 20px auto;
+    /* Center the input field */
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
 .more-button {
     padding: 10px 20px;
     font-size: 16px;

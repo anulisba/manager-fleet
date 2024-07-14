@@ -17,8 +17,7 @@ const WorkshopDetailsPopup = ({ onClose, details, vehicleNumber }) => {
                         <thead>
                             <tr>
                                 <th>Workshop Visit Date</th>
-                                <th>Next Oil Change</th>
-                                <th>Next Tyre Change</th>
+
                                 <th>Complaint Detail</th>
                                 <th>Amount Spent</th>
                             </tr>
@@ -27,8 +26,6 @@ const WorkshopDetailsPopup = ({ onClose, details, vehicleNumber }) => {
                             {details.map((detail, index) => (
                                 <tr key={index}>
                                     <td>{formatDate(detail.workshopVisitDate)}</td>
-                                    <td>{detail.nextOilChange}Km</td>
-                                    <td>{detail.nextTyreChange}Km</td>
                                     <td>{detail.complaintDetail}</td>
                                     <td>{detail.amountSpent}</td>
                                 </tr>

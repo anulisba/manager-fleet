@@ -39,6 +39,19 @@
     margin-bottom: 5px;
 }
 
+.more-button-sos {
+    background-color: var(--button-font-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    float: left;
+    margin-right: 10px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
 .close-popup {
     background: none;
     border: none;

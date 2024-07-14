@@ -11,7 +11,7 @@ const StatusPopup = ({ onClose }) => {
             const data = await response.json();
 
             if (data.length > 0) {
-                setStatusMessage(`Vehicle Status: ${data[0].vehicleStatus}`);
+                setStatusMessage(`Vehicle Location: ${data[0].vehicleLocation}`);
             } else {
                 setStatusMessage('Vehicle not found');
             }
@@ -24,7 +24,7 @@ const StatusPopup = ({ onClose }) => {
         <div className="popup-overlay">
             <div className="popup">
                 <button className="close-button" onClick={onClose}>X</button>
-                <h2>Check Vehicle Status</h2>
+                <h2>Check Vehicle Location</h2>
                 <input
                     type="text"
                     value={vehicleNumber}
@@ -32,7 +32,7 @@ const StatusPopup = ({ onClose }) => {
                     onChange={(e) => setVehicleNumber(e.target.value)}
                     placeholder="Enter Vehicle Number"
                 />
-                <button className='c-submit-button-s' onClick={checkStatus}>Check Status</button>
+                <button className='c-submit-button-s' onClick={checkStatus}>Check Location</button>
                 {statusMessage && <p>{statusMessage}</p>}
             </div>
         </div>
